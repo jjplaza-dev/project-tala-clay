@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-cabin), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-cabin), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand palette */
+  --color-oat: var(--oat);
+  --color-oat-deep: var(--oat-deep);
+  --color-charcoal: var(--charcoal);
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-deep: var(--terracotta-deep);
+  --color-olive: var(--olive);
+  --color-olive-deep: var(--olive-deep);
+  --color-ochre: var(--ochre);
+  --color-line: var(--line);
+  --color-field: var(--field);
+
+  /* 4px everywhere: every radius step resolves to --radius */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
+
+  /* One soft warm-charcoal studio shadow for drawers, dialogs and menus */
+  --shadow-md: 0 18px 44px -18px rgb(41 42 38 / 0.2);
+  --shadow-lg: 0 18px 44px -18px rgb(41 42 38 / 0.2);
+  --shadow-xl: 0 18px 44px -18px rgb(41 42 38 / 0.2);
+}
+
+:root {
+  --oat: #f4efe6;
+  --oat-deep: #eae3d6; /* derived: alternating paper band */
+  --charcoal: #292a26;
+  --terracotta: #a85e43; /* large text and UI only on oat (about 4.2:1) */
+  --terracotta-deep: #8a4a33; /* derived: small text links and errors (about 5.9:1 on oat) */
+  --olive: #89927a; /* decorative only; never text on oat */
+  --olive-deep: #5b6350; /* derived: success text (about 5.5:1 on oat) */
+  --ochre: #d7b96e; /* accents on charcoal; never text on oat */
+  --line: rgb(41 42 38 / 0.15);
+  --field: #84837c; /* field boundary, about 3.3:1 on oat */
+
+  --background: var(--oat);
+  --foreground: var(--charcoal);
+  --card: var(--oat);
+  --card-foreground: var(--charcoal);
+  --popover: var(--oat);
+  --popover-foreground: var(--charcoal);
+  --primary: var(--charcoal);
+  --primary-foreground: var(--oat);
+  --secondary: var(--oat-deep);
+  --secondary-foreground: var(--charcoal);
+  --muted: var(--oat-deep);
+  --muted-foreground: #5c5d56; /* derived: about 5.8:1 on oat */
+  --accent: var(--oat-deep);
+  --accent-foreground: var(--charcoal);
+  --destructive: var(--terracotta-deep);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--terracotta);
+  --radius: 0.25rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  /* Matte paper: very low-opacity inline SVG noise, multiplied onto oat */
+  .paper,
+  .paper-deep {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.16 0 0 0 0 0.15 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-blend-mode: multiply;
+  }
+  .paper {
+    background-color: var(--oat);
+  }
+  .paper-deep {
+    background-color: var(--oat-deep);
+  }
+  /* Dark bands: ochre focus ring and oat text (terracotta is only about 3:1 on charcoal) */
+  .surface-dark {
+    background-color: var(--charcoal);
+    color: var(--oat);
+    --ring: var(--ochre);
+  }
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--charcoal);
+    color: var(--oat);
+    border-radius: var(--radius);
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
+
+@utility text-display {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+@utility text-label {
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+@utility text-price {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+@utility text-spec {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Unlayered on purpose: beats the layered outline-none utilities on shadcn parts */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
