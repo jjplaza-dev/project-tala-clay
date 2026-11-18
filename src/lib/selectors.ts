@@ -105,3 +105,17 @@ export const getShippingRates = (zoneId?: string): ShippingRate[] =>
 export const getDeliveryEstimate = (zoneId: string): DeliveryEstimate | undefined =>
   deliveryEstimates.find((e) => e.zoneId === zoneId);
 export const getPaymentMethods = (): PaymentMethod[] => paymentMethods;
+
+/** Resolves a variant id to everything a cart or order line needs to display. */
+export function getVariantDetails(variantId: string) {
+  const variant = getVariantById(variantId);
+  const product = variant ? getProductById(variant.productId) : undefined;
+  const glaze = variant ? getGlazeById(variant.glazeId) : undefined;
+  if (!variant || !product || !glaze) return undefined;
+  return { variant, product, glaze, unitPrice: getVariantPrice(product, variant) };
+}
+
+const SIZE_ORDER = ["Small", "Medium", "Large", "Side", "Dinner", "Standard"];
+/** Distinct variant sizes, in a stable display order. */
+export const getSizes = (): string[] =>
+  SIZE_ORDER.filter((size) => variants.some((v) => v.size === size));

@@ -28,3 +28,9 @@ export function formatLeadTime(days: number): string {
 export function formatDeliveryWindow(minDays: number, maxDays: number): string {
   return minDays === maxDays ? `${minDays} days` : `${minDays}–${maxDays} days`;
 }
+
+/** ISO 3166-1 alpha-2 codes to readable country names, via Intl. */
+export function formatCountries(codes: string[], locale = "en"): string {
+  const names = new Intl.DisplayNames([locale], { type: "region" });
+  return codes.map((code) => names.of(code) ?? code).join(", ");
+}

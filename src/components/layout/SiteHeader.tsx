@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { MainNav } from "./MainNav";
 import { MobileNavSheet } from "./MobileNavSheet";
 import { PageContainer } from "./PageContainer";
+import { StudioMark } from "./StudioMark";
 
 const iconLink = cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-11");
 
@@ -16,11 +17,12 @@ export function SiteHeader() {
       <PageContainer className="flex h-16 items-center justify-between gap-4 md:h-20">
         <div className="flex items-center gap-2">
           <MobileNavSheet items={primaryNav} />
-          <Link href="/" className="inline-flex min-h-11 items-center gap-2.5 text-xl font-semibold tracking-tight">
-            <svg viewBox="0 0 32 32" aria-hidden className="size-7 text-terracotta">
-              <path d="M4 12h24c0 8-5 14-12 14S4 20 4 12Z" fill="currentColor" />
-            </svg>
-            Tala Clay Studio
+          <Link href="/" aria-label="Tala Clay Studio, home" className="inline-flex min-h-11 items-center gap-3">
+            <StudioMark className="text-terracotta" />
+            <span className="flex flex-col leading-none">
+              <span className="text-[1.65rem] font-semibold tracking-tight">Tala</span>
+              <span className="mt-1 text-[0.6875rem] font-semibold tracking-[0.2em] uppercase">Clay Studio</span>
+            </span>
           </Link>
         </div>
         <div className="flex items-center gap-1">
