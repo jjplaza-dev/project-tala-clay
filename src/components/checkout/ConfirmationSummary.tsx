@@ -1,11 +1,12 @@
 import type { Order } from "@/domain";
 import { OrderSummary } from "@/components/cart/OrderSummary";
-import { formatDeliveryWindow, formatLeadTime, formatMoney } from "@/lib/format";
-import { getDeliveryEstimate, getVariantById } from "@/lib/selectors";
+import { formatCountries, formatDeliveryWindow, formatLeadTime, formatMoney } from "@/lib/format";
+import { getDeliveryEstimate, getVariantById, getZoneForCountry } from "@/lib/selectors";
 
 export function ConfirmationSummary({ order }: { order: Order }) {
   const { contact, address } = order.checkout;
-  const estimate = getDeliveryEstimate("zone-ph");
+  const zone = getZoneForCountry(address.country);
+  const estimate = zone ? getDeliveryEstimate(zone.id) : undefined;
   const madeToOrderDays = order.items
     .map((i) => getVariantById(i.variantId))
     .filter((v) => v?.stockStatus === "made_to_order")
@@ -44,9 +45,15 @@ export function ConfirmationSummary({ order }: { order: Order }) {
             <br />
             {address.line1}
             <br />
+            {address.line2 ? (
+              <>
+                {address.line2}
+                <br />
+              </>
+            ) : null}
             {address.city}, {address.region} {address.postalCode}
             <br />
-            Philippines
+            {formatCountries([address.country])}
           </address>
         </section>
         <section aria-labelledby="delivery-expect-title">

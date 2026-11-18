@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cabin, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { CartProvider } from "@/components/cart/CartProvider";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 
@@ -32,11 +33,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        <CartProvider>
+          <SiteHeader />
+          <main id="main" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+        </CartProvider>
       </body>
     </html>
   );

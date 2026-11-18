@@ -1,16 +1,13 @@
 import Link from "next/link";
-import { SearchIcon, ShoppingBagIcon } from "lucide-react";
 import { primaryNav } from "@/config/nav";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { MiniCart } from "@/components/cart/MiniCart";
+import { SearchDialog } from "@/components/shop/SearchDialog";
 import { MainNav } from "./MainNav";
 import { MobileNavSheet } from "./MobileNavSheet";
 import { PageContainer } from "./PageContainer";
 import { StudioMark } from "./StudioMark";
 
-const iconLink = cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-11");
-
-// Search is a link to the /shop search entry and cart is a link to /cart in this static phase.
+// Search and the cart open live dialogs: search (Phase 3) and the mini-cart (Phase 4).
 export function SiteHeader() {
   return (
     <header className="paper border-b border-line">
@@ -27,12 +24,8 @@ export function SiteHeader() {
         </div>
         <div className="flex items-center gap-1">
           <MainNav items={primaryNav} />
-          <Link href="/shop#search" aria-label="Search the shop" className={iconLink}>
-            <SearchIcon aria-hidden strokeWidth={1.5} className="size-5" />
-          </Link>
-          <Link href="/cart" aria-label="Cart" className={iconLink}>
-            <ShoppingBagIcon aria-hidden strokeWidth={1.5} className="size-5" />
-          </Link>
+          <SearchDialog />
+          <MiniCart />
         </div>
       </PageContainer>
     </header>

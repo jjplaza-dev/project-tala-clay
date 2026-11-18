@@ -39,6 +39,7 @@ export function VariantOptionsList({ product }: { product: Product }) {
                       {v.stockStatus === "sold_out" ? (
                         <BackInStockDialog
                           size="sm"
+                          variantId={v.id}
                           idPrefix={`opt-${v.id}`}
                           productName={product.name}
                           variantLabel={`${glaze?.name}, ${v.size}`}

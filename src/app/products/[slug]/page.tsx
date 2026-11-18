@@ -1,54 +1,28 @@
 import { notFound } from "next/navigation";
-import type { ProductVariant } from "@/domain";
 import { Breadcrumbs } from "@/components/content/Breadcrumbs";
 import { DraftNotice } from "@/components/content/DraftNotice";
 import { SectionBand } from "@/components/layout/SectionBand";
-import { BuyPanel } from "@/components/product/BuyPanel";
-import { CareSnippet, DeliveryEstimateBlock } from "@/components/product/CareAndDelivery";
-import { ProductGallery } from "@/components/product/ProductGallery";
+import { CareSnippet } from "@/components/product/CareAndDelivery";
+import { DeliveryEstimate } from "@/components/product/DeliveryEstimate";
+import { ProductVariantProvider } from "@/components/product/ProductVariantContext";
 import { RelatedPieces } from "@/components/product/RelatedPieces";
-import { SpecList, type SpecItem } from "@/components/product/SpecList";
+import { VariantBuyPanel, VariantGallery, VariantSpecs } from "@/components/product/VariantViews";
 import { VariantOptionsList } from "@/components/product/VariantOptionsList";
-import { formatLeadTime } from "@/lib/format";
 import { getCategories, getProductBySlug, getProducts, getVariantsForProduct } from "@/lib/selectors";
 
 export function generateStaticParams() {
   return getProducts().map((p) => ({ slug: p.slug }));
 }
 
-function specItems(v: ProductVariant): SpecItem[] {
-  const d = v.dimensions;
-  const items: SpecItem[] = [
-    { label: "Size", value: v.size },
-    { label: "Height", value: `${d.heightMm} mm` },
-    { label: "Width", value: `${d.widthMm} mm` },
-  ];
-  if (d.depthMm) items.push({ label: "Depth", value: `${d.depthMm} mm` });
-  if (d.capacityMl) items.push({ label: "Capacity", value: `${d.capacityMl} ml` });
-  if (d.weightG) items.push({ label: "Weight", value: `${d.weightG} g` });
-  items.push({ label: "SKU", value: v.sku });
-  items.push({
-    label: "Availability",
-    value:
-      v.stockStatus === "made_to_order" && v.leadTimeDays
-        ? `Made to order, ${formatLeadTime(v.leadTimeDays)}`
-        : v.stockStatus === "ready_to_ship"
-          ? "Ready to ship"
-          : "Sold out",
-  });
-  return items;
-}
-
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
   if (!product) notFound();
-  const variant = getVariantsForProduct(product.id)[0];
   const category = getCategories().find((c) => c.id === product.categoryId);
-  if (!variant || !category) notFound();
+  if (!category || getVariantsForProduct(product.id).length === 0) notFound();
 
   return (
-    <>
+    <ProductVariantProvider productId={product.id}>
       <SectionBand className="lg:py-20">
         <Breadcrumbs
           items={[
@@ -60,10 +34,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         />
         <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-7">
-            <ProductGallery product={product} glazeId={variant.glazeId} />
+            <VariantGallery />
           </div>
           <div className="lg:col-span-5">
-            <BuyPanel product={product} variant={variant} />
+            <VariantBuyPanel />
           </div>
         </div>
       </SectionBand>
@@ -82,7 +56,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           <div className="lg:col-span-5 lg:col-start-8">
             <h2 className="mb-4 text-2xl font-semibold">Specifications</h2>
-            <SpecList items={specItems(variant)} />
+            <VariantSpecs />
             <DraftNotice label="Sample values" className="mt-4">
               Sizes, stock and lead times are placeholders for the studio to confirm.
             </DraftNotice>
@@ -93,7 +67,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <SectionBand>
         <div className="grid gap-16 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <DeliveryEstimateBlock variant={variant} />
+            <DeliveryEstimate />
           </div>
           <div className="lg:col-span-7">
             <VariantOptionsList product={product} />
@@ -102,6 +76,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       </SectionBand>
 
       <RelatedPieces productId={product.id} />
-    </>
+    </ProductVariantProvider>
   );
 }

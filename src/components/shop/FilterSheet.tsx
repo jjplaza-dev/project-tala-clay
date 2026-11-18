@@ -15,7 +15,7 @@ export function FilterSheet({ children }: { children: ReactNode }) {
       <SheetContent side="bottom" className="max-h-[85vh]">
         <SheetHeader>
           <SheetTitle className="text-lg">Filters and sort</SheetTitle>
-          <SheetDescription>Preview of the filter controls.</SheetDescription>
+          <SheetDescription>Narrow the list by glaze, size and availability. Results update as you choose.</SheetDescription>
         </SheetHeader>
         <div className="overflow-y-auto px-6 pb-8">{children}</div>
       </SheetContent>

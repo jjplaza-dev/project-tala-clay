@@ -100,6 +100,8 @@ export const getCareNotesForProduct = (productId: string): CareNote[] => {
 export const getCareGuideSections = (): CareGuideSection[] => careGuideSections;
 
 export const getShippingZones = (): ShippingZone[] => shippingZones;
+export const getZoneForCountry = (countryCode: string): ShippingZone | undefined =>
+  shippingZones.find((z) => z.countries.includes(countryCode));
 export const getShippingRates = (zoneId?: string): ShippingRate[] =>
   zoneId ? shippingRates.filter((r) => r.zoneId === zoneId) : shippingRates;
 export const getDeliveryEstimate = (zoneId: string): DeliveryEstimate | undefined =>
